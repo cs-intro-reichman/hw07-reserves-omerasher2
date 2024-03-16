@@ -13,16 +13,13 @@ public class SpellChecker {
 	public static String tail(String str) {
 			return str.substring(1,str.length());
 	}
-	public static char head(String str) {
-			return str.charAt(0);
-	}
 
 	public static int levenshtein(String word1, String word2) {
 		String lowword1 = word1.toLowerCase();
 		String lowword2 = word2.toLowerCase();
 		if (lowword2.length()==0) return lowword1.length();
 		if (lowword1.length()==0) return lowword2.length();
-		if (head(lowword1) == head(word2)) return levenshtein(lowword1, lowword2);
+		if (lowword1.charAt(0) == word2.charAt(0)) return levenshtein(lowword1, lowword2);
 		else{
 			return 1 + Math.min(Math.min((levenshtein(tail(lowword1), lowword2)), levenshtein(lowword1, tail(lowword2))), levenshtein(tail(lowword1), tail(lowword2)));
 		}
