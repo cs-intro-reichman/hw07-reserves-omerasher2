@@ -1,7 +1,4 @@
-
 public class SpellChecker {
-
-
 	public static void main(String[] args) {
 		String word = args[0];
 		int threshold = Integer.parseInt(args[1]);
@@ -11,44 +8,41 @@ public class SpellChecker {
 	}
 
 	public static String tail(String str) {
-			return str.substring(1,str.length());
+		return str.substring(1,str.length());
 	}
 
 	public static int levenshtein(String word1, String word2) {
-		String lowword1 = word1.toLowerCase();
-		String lowword2 = word2.toLowerCase();
-		if (lowword2.length()==0) return lowword1.length();
-		if (lowword1.length()==0) return lowword2.length();
-		if (lowword1.charAt(0) == word2.charAt(0)){
-		 return levenshtein(lowword1, lowword2);
-		}
-		else{
-			return 1 + Math.min(Math.min((levenshtein(tail(lowword1), lowword2)), levenshtein(lowword1, tail(lowword2))), levenshtein(tail(lowword1), tail(lowword2)));
+		String word1Low=word1.toLowerCase();
+		String word2Low=word2.toLowerCase();
+		if (word1Low.length()==0) return word2Low.length();
+		if (word2Low.length()==0) return word1Low.length();
+		if (word1Low.charAt(0)==word2.charAt(0)) {
+			return levenshtein(tail(word1Low), tail(word2Low));
+		} else {
+			return 1+Math.min(Math.min(levenshtein(tail(word1Low), word2Low),levenshtein(word1Low, tail(word2Low))), levenshtein(tail(word1Low), tail(word2Low)));
 		}
 	}
 
 	public static String[] readDictionary(String fileName) {
 		String[] dictionary = new String[3000];
 		In in = new In(fileName);
-		for (int i=0; i<dictionary.length; i++){
+		for (int i=0; i<dictionary.length; i++) {
 			dictionary[i] = in.readLine();
 		}
 		return dictionary;
 	}
-	
 
 	public static String spellChecker(String word, int threshold, String[] dictionary) {
-		String lowword = word.toLowerCase();
-		String toPrint = lowword;
-		for (int i = 0; i < dictionary.length; i++) {
-
-			if ((levenshtein(lowword, dictionary[i])) <= threshold) {
-				if (levenshtein(lowword, dictionary[i]) < levenshtein(lowword, toPrint) || toPrint.equals(word)) {
-					toPrint = dictionary[i];
-				}
+		String wordLow=word.toLowerCase();
+		String wordMatch=wordLow;
+		int minLev=1000;
+		for (String dictWord : dictionary) {
+			int lev = levenshtein(wordLow, dictWord);
+			if (lev < minLev && lev <= threshold) {
+				minLev = lev;
+				wordMatch = dictWord;
 			}
 		}
-
-		return toPrint;
-}
+		return wordMatch;
+	}
 }
