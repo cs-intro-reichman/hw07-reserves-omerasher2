@@ -11,25 +11,45 @@ public class SpellChecker {
 	}
 
 	public static String tail(String str) {
-		// Your code goes here
+			return str.substring(1,str.length());
+	}
+	public static String head(String str) {
+			return str.substring(0,1);
 	}
 
 	public static int levenshtein(String word1, String word2) {
-		// Your code goes here
+		String lowword1 = word1.toLowerCase();
+		String lowword2 = word2.toLowerCase();
+		if (lowword2.length()==0) return lowword1.length();
+		if (lowword1.length()==0) return lowword2.length();
+		if (head(lowword1) == head(lowword2)) return levenshtein(lowword1, lowword2);
+		else{
+			return 1 + Math.min(Math.min((levenshtein(tail(lowword1), lowword2)), levenshtein(lowword1, tail(lowword2))), levenshtein(tail(lowword1), tail(lowword2)));
+		}
 	}
 
 	public static String[] readDictionary(String fileName) {
 		String[] dictionary = new String[3000];
-
 		In in = new In(fileName);
-
-		// Your code here
-
+		for (int i=0; i<dictionary.length; i++){
+			dictionary[i] = in.readLine();
+		}
 		return dictionary;
 	}
+	
 
 	public static String spellChecker(String word, int threshold, String[] dictionary) {
-		// Your code goes here
-	}
+		String lowword = word.toLowerCase();
+		String toPrint = lowword;
+		for (int i = 0; i < dictionary.length; i++) {
 
+			if ((levenshtein(lowword, dictionary[i])) <= threshold) {
+				if (levenshtein(lowword, dictionary[i]) < levenshtein(lowword, toPrint) || toPrint.equals(lowword)) {
+					toPrint = dictionary[i];
+				}
+			}
+		}
+
+		return toPrint;
+}
 }
