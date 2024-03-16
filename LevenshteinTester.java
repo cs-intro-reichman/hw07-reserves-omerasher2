@@ -5,6 +5,7 @@ public class LevenshteinTester {
             System.out.println("Usage: java LevenshteinTester <word1> <word2>");
             return;
         }
+
         String word1 = args[0];
         String word2 = args[1];
 
