@@ -13,8 +13,8 @@ public class SpellChecker {
 	public static String tail(String str) {
 			return str.substring(1,str.length());
 	}
-	public static String head(String str) {
-			return str.substring(0,1);
+	public static char head(String str) {
+			return str.charAt(0);
 	}
 
 	public static int levenshtein(String word1, String word2) {
