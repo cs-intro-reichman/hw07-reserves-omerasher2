@@ -22,7 +22,7 @@ public class SpellChecker {
 		String lowword2 = word2.toLowerCase();
 		if (lowword2.length()==0) return lowword1.length();
 		if (lowword1.length()==0) return lowword2.length();
-		if (head(lowword1) == head(lowword2)) return levenshtein(lowword1, lowword2);
+		if (head(lowword1) == head(word2)) return levenshtein(lowword1, lowword2);
 		else{
 			return 1 + Math.min(Math.min((levenshtein(tail(lowword1), lowword2)), levenshtein(lowword1, tail(lowword2))), levenshtein(tail(lowword1), tail(lowword2)));
 		}
@@ -39,17 +39,16 @@ public class SpellChecker {
 	
 
 	public static String spellChecker(String word, int threshold, String[] dictionary) {
-		String lowword = word.toLowerCase();
-		String toPrint = lowword;
-		for (int i = 0; i < dictionary.length; i++) {
-
-			if ((levenshtein(lowword, dictionary[i])) <= threshold) {
-				if (levenshtein(lowword, dictionary[i]) < levenshtein(lowword, toPrint) || toPrint.equals(lowword)) {
-					toPrint = dictionary[i];
-				}
+		String wordLow=word.toLowerCase();
+		String wordMatch=wordLow;
+		int minLev=1000;
+		for (String dictWord : dictionary) {
+			int lev = levenshtein(wordLow, dictWord);
+			if (lev < minLev && lev <= threshold) {
+				minLev = lev;
+				wordMatch = dictWord;
 			}
 		}
-
-		return toPrint;
+		return wordMatch;
 }
 }
